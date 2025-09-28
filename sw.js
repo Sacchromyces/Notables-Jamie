@@ -8,8 +8,8 @@ const FILES_TO_CACHE = [
   "JimsJams.jpg",
   "Ooh_La_La.jpg",
   "Rent.jpg",
-  "Moulin_Rouge.jpg"
-  "Burlesque.jpg"
+  "Moulin_Rouge.jpg",
+  "Burlesque.jpg" // <-- fixed missing comma
 ];
 
 // Install service worker → cache app shell
@@ -56,9 +56,3 @@ self.addEventListener("fetch", event => {
     );
   }
 });
-
-
-
-
-
-
