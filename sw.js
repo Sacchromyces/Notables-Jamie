@@ -3,13 +3,14 @@ const CACHE_NAME = "notables-cache-v3"; // bumped version
 // Only cache the app shell (HTML, manifest, covers, logo)
 const FILES_TO_CACHE = [
   "index.html",
+  "Home.jpg"
   "manifest.json",
   "Notables_Logo.png",
   "JimsJams.jpg",
   "Ooh_La_La.jpg",
   "Rent.jpg",
   "Moulin_Rouge.jpg",
-  "Burlesque.jpg" // <-- fixed missing comma
+  "Burlesque.jpg"
 ];
 
 // Install service worker → cache app shell
@@ -56,3 +57,4 @@ self.addEventListener("fetch", event => {
     );
   }
 });
+
