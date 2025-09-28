@@ -1,0 +1,21 @@
+{
+  "name": "Notables - Jamie",
+  "short_name": "Notables",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "Your music player with albums and playlists.",
+  "icons": [
+    {
+      "src": "Notables_Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "Notables_Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
