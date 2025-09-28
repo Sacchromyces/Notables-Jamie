@@ -97,14 +97,15 @@ body {
 }
 
 #playerArea {
-    margin-top: 10px;
+    margin-top: 20px;  /* enough space below album title */
+    padding-bottom: 0;
 }
 #playlist button {
     margin: 5px;
     padding: 10px 15px;
-    background: #222;
+    background: #f5f5f5;
     border: 1px solid #555;
-    color: #eee;
+    color: #000;
     cursor: pointer;
     border-radius: 5px;
     display: block;
@@ -114,17 +115,17 @@ body {
     transition: background 0.2s, filter 0.2s;
 }
 #playlist button:hover {
-    background: #444;
+    background: #e0e0e0;
 }
 #playlist button.playing {
-    background: #555;
-    color: #ccc;
+    background: #d0d0d0;
+    color: #000;
     filter: brightness(0.8);
 }
 
 #nowPlaying { margin: 10px 0; font-weight: bold; }
 audio {
-    margin-top: 12px;
+    margin-top: 15px;
     width: 95%;
     max-width: 1000px;
     outline: none;
@@ -166,19 +167,19 @@ audio {
     margin-top: 10px;     /* spacing above quote */
     min-height: auto; /* let content height shrink naturally */
     font-size: 12px;
-    color: #aaa;
+    color: #000;
     text-align: center;
     line-height: 1.4;
   }
   #nowPlaying {
-    margin: 40px 0 5px 0; /* top 40px, right 0, bottom 0px, left 0 */
+    margin: 10px 0 5px 0; /* top 10px, right 0, bottom 0px, left 0 */
   }
     body.playlist-open #nowPlaying {
-    margin-top: 20px; /* lower when a playlist is open */
+    margin-top: 10px; /* lower when a playlist is open */
   }
   #playerArea {
-    margin-top: -50px; /* optional: reduce extra top spacing */
-    padding-bottom: -10px; /* optional: reduce extra bottom spacing */
+    margin-top: -10px; /* optional: reduce extra top spacing */
+    padding-bottom: 10px; /* optional: reduce extra bottom spacing */
   }
  body {
     display: flex;
@@ -255,6 +256,7 @@ audio {
     font-size: 16px; 
     justify-content: center;
     align-items: center;
+    margin-top: 10px; /* space from album title */
   }
 
   audio { 
@@ -262,7 +264,10 @@ audio {
   }
 
   #albumTitle { 
-    font-size: 20px; 
+    display: block;
+    margin: 30px 0 15px 0; /* top 30px, bottom 15px */
+    position: relative;
+    z-index: 2;
   }
     
 /* --- Mobile styles (max-width 480px) --- */
@@ -271,7 +276,7 @@ audio {
 }
 
 body.playlist-open #nowPlaying {
-    margin-top: 25px; /* keep a proper gap when playlist is open */
+    margin-top: 20px; /* keep a proper gap when playlist is open */
   }
     
   #mobilePlayer {
@@ -302,7 +307,7 @@ body.playlist-open #nowPlaying {
     padding: 8px;
     font-weight: bold;
     font-size: 18px;
-    color: #eee;
+    color: #000;
     text-align: center;
     width: 400px;            
     max-width: 92%;          
@@ -326,6 +331,17 @@ body.playlist-open #nowPlaying {
   .home-square:hover { 
     background: #333; 
   }
+/* Fix first song overlapping album title */
+#albumTitle {
+    display: block;
+    margin: 30px 0 15px 0; /* top 30px, bottom 15px */
+    position: relative;
+    z-index: 2;
+}
+
+#playlist button {
+    margin-top: 10px; /* space from album title */
+ }
 }
 
 </style>
@@ -363,9 +379,12 @@ body.playlist-open #nowPlaying {
       </svg>
     </button>
 
-    <button id="play" class="control-btn" title="Play/Pause">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="play-icon">&#9654;</svg>
-    </button>
+   <button id="play" class="control-btn" title="Play/Pause">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="6 4 20 12 6 20 6 4"></polygon>
+  </svg>
+</button>
+
 
     <button id="next" class="control-btn" title="Next">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -396,41 +415,114 @@ body.playlist-open #nowPlaying {
 <script>
 // --- Albums & Songs ---
 const albums = {
-  "Vessel": { cover:"Vessel.jpg", songs:[
-    {file:"Ode_to_Sleep.mp3", title:"Ode to Sleep"},
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
+  "Jims Jams": { cover:"JimsJams.jpg", songs:[
+    {file:"Tim_McGraw.mp3", title:"Tim McGraw - Taylor Swift"},
+    {file:"Hey_Stephen.mp3", title: "Hey Stephen - Taylor Swift"},
+    {file:"White_Horse.mp3", title: "White Horse - Taylor Swift"},
+    {file:"Tell_Me_Why.mp3", title: "Tell Me Why - Taylor Swift"},
+    {file:"You're_Not_Sorry.mp3", title: "You're Not Sorry - Taylor Swift"},
+    {file:"The_Best_Day.mp3", title: "The Best Day - Taylor Swift"},
+    {file:"Dear_John.mp3", title: "Dear John - Taylor Swift"},
+    {file:"Innocent.mp3", title: "Innocent - Taylor Swift"},
+    {file:"Long_Live.mp3", title: "Long Live - Taylor Swift"},
+    {file:"Fuckin'_Perfect.mp3", title: "Fuckin' Perfect - Pink"},
+    {file:"Die_With_A_Smile.mp3", title: "Die With A Smile - Bruno Mars & Lady Gaga"},
+    {file:"Pink_Pony_Club.mp3", title: "Pink Pony Club - Chappel Roan"},
+    {file:"That's_So_True.mp3", title: "That's So True - Gracie Abrams"},
+    {file:"Life_Goes_On.mp3", title: "Life Goes On - Ed Sheeran & Luke Combs"},
+    {file:"Cry.mp3", title: "Cry - Benson Boone"},
+    {file:"Total_Eclipse_Of_The_Heart.mp3", title: "Total Eclipse Of The Heart - Bonnie Tyler"},
+    {file:"I_Need_A_Hero.mp3", title: "I Need A Hero - Bonnie Tyler"},
+    {file:"Running.mp3", title: "Running - Evermore"},
+    {file:"It's_Too_Late.mp3", title: "It's Too Late - Evermore"},
+    {file:"Behind_These_Hazel_Eyes.mp3", title: "Behind These Hazel Eyes - Kelly Clarkson"},
+    {file:"Sunday_Morning.mp3", title: "Sunday Morning - Maroon 5"},
+    {file:"Losing_Grip.mp3", title: "Losing Grip - Avril Lavigne"},
+    {file:"I'm_With_You.mp3", title: "I'm With You - Avril Lavigne"},
+    {file:"Mobile.mp3", title: "Mobile - Avril Lavigne"},
+    {file:"Tomorrow.mp3", title: "Tomorrow - Avril Lavigne"},
+    {file:"Anything_But_Ordinary.mp3", title: "Anything But Ordinary - Avril Lavigne"},
+    {file:"My_Happy_Ending.mp3", title: "My Happy Ending - Avril Lavigne"},
+    {file:"Nobody's_Fool.mp3", title: "Nobody's Fool - Avril Lavigne"},
+    {file:"Naked.mp3", title: "Naked - Avril Lavigne"},
+    {file:"When_You're_Gone.mp3", title: "When You're Gone - Avril Lavigne"},
+    {file:"Keep_Holding_On.mp3", title: "Keep Holding On - Avril Lavigne"},
+    {file:"Breakaway.mp3", title: "Breakaway - Avril Lavigne"},
+    {file:"Easy_On_Me.mp3", title: "Easy On Me - Adele"},
+    {file:"Only_Love_Can_Hurt_Like_This.mp3", title: "Only Love Can Hurt Like This - Paloma Faith"},
+    {file:"Cheese.mp3", title: "Cheese - Stray Kids"},
+    {file:"Chk_Chk_Boom.mp3", title: "Chk Chk Boom - Stray Kids"},
+    {file:"Maniac.mp3", title: "Maniac - Stray Kids"},
+    {file:"Domino.mp3", title: "Domino - Stray Kids"},
+    {file:"God's_Menu.mp3", title: "God's Menu - Stray Kids"},
+    {file:"Levanter.mp3", title: "Levanter - Stray Kids"},
+    {file:"Lonely_St..mp3", title: "Lonely St."},
+    {file:"Red_Lights.mp3", title: "Red Lights - Stray Kids"},
+    {file:"Sorry,_I_Love_You.mp3", title: "Sorry, I Love You - Stray Kids"},
+    {file:"Thunderous.mp3", title: "Thunderous - Stray Kids"},
+    {file:"Waiting_For_Us.mp3", title: "Waiting For Us - Stray Kids"},
+    {file:"Deja_Vu.mp3", title: "Deja Vu - Ateez"},
+    {file:"Birthday.mp3", title: "Birthday - Ten"},
+    {file:"Lovesong.mp3", title: "Lovesong - Tomorrow X"},
+    {file:"Anti-Romantic.mp3", title: "Anti-Romantic - Tomorrow X"},
+    {file:"Lo$er=Lover.mp3", title: "Lo$er=Lover - Tomorrow X"},
+    {file:"Magic_Shop.mp3", title: "Magic Shop - BTS"},
+    {file:"Last_Night.mp3", title: "Last Night - Morgan Wallen"},
+    {file:"Fast_Car.mp3", title: "Fast Car - Luke Combs"},
+    {file:"Forever_After_All.mp3", title: "Forever After All - Luke Combs"},
+    {file:"Thinkin'_Bout_Me.mp3", title: "Thinkin' Bout Me - Morgan Wallen"},
+    {file:"Wasted_On_You.mp3", title: "Wasted On You - Morgan Wallen"},
+    {file:"Doin'_This.mp3", title: "Doin' This - Luke Combs"}
       ]},
-  "Blurryface": { cover:"Blurryface.jpg", songs:[
-    {file:"Stressed_Out.mp3", title:"Stressed Out"},
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
+  "Ooh La La - Les Miserables": { cover:"Ooh_La_La.jpg", songs:[
+    {file:"Look_Down.mp3", title:"Look Down"},
+    {file:"Valjean's_Soliloquy.mp3", title: "Valjean's Soliloquy"},
+    {file:"At_The_End_Of_The_Day.mp3", title: "At The End Of The Day"},
+    {file:"I_Dreamed_A_Dream.mp3", title: "I Dreamed A Dream"},
+    {file:"The_Confrontation.mp3", title: "The Confrontation"},
+    {file:"Paris/_Look_Down.mp3", title: "Paris/ Look Down"},
+    {file:"Cafe-Red_And_Black.mp3", title: "Cafe - Red And Black"},
+    {file:"A_Heart_Full_Of_Love.mp3", title: "A Heart Full Of Love"},
+    {file:"On_My_Own.mp3", title: "On My Own"},
+    {file:"One_Day_More.mp3", title: "One Day More"},
+    {file:"Drink_With_Me.mp3", title: "Drink With Me"},
+    {file:"Empty_Chairs_At_Empty_Tables.mp3", title: "Empty Chairs At Empty Tables"},
+    {file:"Epilogue.mp3", title: "Epilogue"}
       ]},
-  "2009 - Twentyøne": { cover:"2009_21_Cover.jpg", songs: [
-    {file:"Implicit_Demand_For_Proof.mp3", title:"Implicit Demand For Proof"},
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
-    {file:"
+   "Rent Soundtrack": {cover:"Rent.jpg", songs: [
+    {file:"Seasons_Of_Love.mp3", title: "Seasons Of Love"},
+    {file:"Rent.mp3", title: "Rent"},
+    {file:"You'll_See.mp3", title: "You'll See"},
+    {file:"One_Song_Glory.mp3", title: "One Song Glory"},
+    {file:"Life_Support.mp3", title: "Life Support"},
+    {file:"Another_Day.mp3", title: "Another Day"},
+    {file:"Santa_Fe.mp3", title: "Santa Fe"},
+    {file:"I'll_cover_You.mp3", title: "I'll Cover You"},
+    {file:"La_Vie_Boheme_A.mp3", title: "La Vie Boheme A"},
+    {file:"La_Vie_Boheme_B.mp3", title: "La Vie Boheme B"},
+    {file:"Without_You.mp3", title: "Without You"},
+    {file:"I'll_Cover_You.mp3", title: "I'll Cover You"},
+    {file:"Halloween.mp3", title: "Halloween"},
+    {file:"Goodbye_Love.mp3", title: "Goodbye Love"},
+    {file:"What_You_Own.mp3", title: "What You Own"},
+    {file:"Love_Heals.mp3", title: "Love Heals"}
+      ]},
+  "Moulin Rouge Soundtrack": { cover:"Moulin_Rouge.jpg", songs: [
+    {file:"Your_Song.mp3", title:"Your Song"},
+    {file:"One_Day_I'll_Fly_Away.mp3", title: "One Day I'll Fly Away"},
+    {file:"Come_What_May.mp3", title: "Come What May"},
+    {file:"El_Tango_De_Roxanne.mp3", title: "El Tango De Roxanne"},
+    {file:"The_Show_Must_Go_On.mp3", title: " The Show Must Go On"}
+      ]},
+  "Burlesque Soundtrack": { cover:"Burlesque.jpg", songs: [
+    {file:"Something's_Got_A_Hold_Of_Me.mp3", title:"Something's Got A Hold Of Me"},
+    {file:"Welcome_To_Burlesque.mp3", title: "Welcome To Burlesque"},
+    {file:"But_I_Am_A_Good_Girl.mp3", title: "But I Am A Good Girl"},
+    {file:"Guy_What_Takes_His_Time.mp3", title: "Guy What Takes His Time"},
+    {file:"Express.mp3", title: "Express"},
+    {file:"You_Haven't_Seen_The_Last_Of_Me.mp3", title: "You Haven't Seen The Last Of Me"},
+    {file:"Bound_To_You.mp3", title: "Bound To You"},
+    {file:"Cell_Block_Tango.mp3", title: "Cell Block Tango - Chicago"}
  ]}
 };
 
@@ -464,9 +556,15 @@ function updatePlaylistButtons(){
 function loadAlbum(name){
   currentAlbum = name;
   lastAlbum = name;
+  
+  // Set album title text
   albumTitle.textContent = name;
-  playlistDiv.innerHTML = "";
+  
+  // Ensure title is visible
+  albumTitle.style.display = "block";
 
+  playlistDiv.innerHTML = "";
+  
   albums[name].songs.forEach((song,index)=>{
     const btn = document.createElement("button");
     btn.textContent = song.title;
@@ -474,11 +572,10 @@ function loadAlbum(name){
     playlistDiv.appendChild(btn);
   });
 
-  // Add class to indicate playlist is open
   document.body.classList.add("playlist-open");
-
   updatePlaylistButtons();
 }
+
 
 
 // --- Play song ---
@@ -556,7 +653,7 @@ function prevTrack(){
 // --- Home tile ---
 const homeSquare = document.createElement("div");
 homeSquare.className = "home-square";
-homeSquare.innerHTML = `<img src="Home.jpg" alt="Home"><div class="album-title">Home</div>`;
+homeSquare.innerHTML = `<img src="home.jpg" alt="Home"><div class="album-title">Home</div>`;
 homeSquare.addEventListener("click", ()=>{
   playlistDiv.innerHTML = "";
   albumTitle.textContent = "";
@@ -570,7 +667,7 @@ document.getElementById("homeWrapper").appendChild(homeSquare);
 const row = document.createElement("div");
 row.className = "album-row";
 
-["Vessel", "Blurryface", "2009 - Twentyøne", "Twentyøne Piløts", "Upstairs", "Downstairs"].forEach(name=>{
+["Jims Jams", "Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].forEach(name=>{
   const albumDiv = document.createElement("div");
   albumDiv.className = "album";
   albumDiv.innerHTML = `<img src="${albums[name].cover}" alt="${name}"><div class="album-title">${name}</div>`;
@@ -582,7 +679,7 @@ albumsDiv.appendChild(row);
 
 // --- Album tiles (all others) ---
 Object.keys(albums).forEach(name=>{
-  if (["Vessel","Blurryface", "2009 - Twentyøne", "Twentyøne Piløts", "Upstairs", "Downstairs"].includes(name)) return;
+  if (["Jims Jams","Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].includes(name)) return;
   const albumDiv = document.createElement("div");
   albumDiv.className = "album";
   albumDiv.innerHTML = `<img src="${albums[name].cover}" alt="${name}"><div class="album-title">${name}</div>`;
