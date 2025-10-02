@@ -97,8 +97,7 @@ body {
 }
 
 #playerArea {
-    margin-top: 20px;  /* enough space below album title */
-    padding-bottom: 0;
+    margin-top: 10px;  /* enough space below album title */
 }
 #playlist button {
     margin: 5px;
@@ -172,14 +171,14 @@ audio {
     line-height: 1.4;
   }
   #nowPlaying {
-    margin: 10px 0 5px 0; /* top 10px, right 0, bottom 0px, left 0 */
+    margin: 40px 0 5px 0; /* top 40px, right 0, bottom 0px, left 0 */
   }
     body.playlist-open #nowPlaying {
-    margin-top: 10px; /* lower when a playlist is open */
+    margin-top: 20px; /* lower when a playlist is open */
   }
   #playerArea {
-    margin-top: -10px; /* optional: reduce extra top spacing */
-    padding-bottom: 10px; /* optional: reduce extra bottom spacing */
+    margin-top: -50px; /* optional: reduce extra top spacing */
+    padding-bottom: -10px; /* optional: reduce extra bottom spacing */
   }
  body {
     display: flex;
@@ -256,7 +255,6 @@ audio {
     font-size: 16px; 
     justify-content: center;
     align-items: center;
-    margin-top: 10px; /* space from album title */
   }
 
   audio { 
@@ -264,10 +262,7 @@ audio {
   }
 
   #albumTitle { 
-    display: block;
-    margin: 30px 0 15px 0; /* top 30px, bottom 15px */
-    position: relative;
-    z-index: 2;
+   font-size: 20px;
   }
     
 /* --- Mobile styles (max-width 480px) --- */
@@ -276,7 +271,7 @@ audio {
 }
 
 body.playlist-open #nowPlaying {
-    margin-top: 20px; /* keep a proper gap when playlist is open */
+    margin-top: 25px; /* keep a proper gap when playlist is open */
   }
     
   #mobilePlayer {
@@ -320,6 +315,40 @@ body.playlist-open #nowPlaying {
   .home-square img {
     display: none;
   }
+   .album.pop {
+  transform: scale(1.05);
+  transition: transform 0.15s ease;
+}
+
+.album.pop-back {
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+    @keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.album.pop {
+  animation: pop 0.35s ease forwards;
+}
+/* Remove hover scale on mobile so animation works properly */
+@media (max-width: 480px) {
+  .album img:hover {
+    transform: none;
+  }
+
+  /* Pop animation for tapped image */
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .album img.pop {
+    animation: pop 0.35s ease forwards;
+  }
 
   #homeWrapper {
     display: flex;
@@ -330,17 +359,6 @@ body.playlist-open #nowPlaying {
 
   .home-square:hover { 
     background: #333; 
-  }
-/* Fix first song overlapping album title */
-#albumTitle {
-    display: block;
-    margin: 30px 0 15px 0; /* top 30px, bottom 15px */
-    position: relative;
-    z-index: 2;
-}
-
-#playlist button {
-    margin-top: 10px; /* space from album title */
  }
 }
 
@@ -415,7 +433,7 @@ body.playlist-open #nowPlaying {
 <script>
 // --- Albums & Songs ---
 const albums = {
-  "Jims Jams": { cover:"JimsJams.jpg", songs:[
+  "Jams": { cover:"JimsJams.jpg", songs:[
     {file:"Tim_McGraw.mp3", title:"Tim McGraw - Taylor Swift"},
     {file:"Hey_Stephen.mp3", title: "Hey Stephen - Taylor Swift"},
     {file:"White_Horse.mp3", title: "White Horse - Taylor Swift"},
@@ -556,15 +574,9 @@ function updatePlaylistButtons(){
 function loadAlbum(name){
   currentAlbum = name;
   lastAlbum = name;
-  
-  // Set album title text
   albumTitle.textContent = name;
-  
-  // Ensure title is visible
-  albumTitle.style.display = "block";
-
   playlistDiv.innerHTML = "";
-  
+
   albums[name].songs.forEach((song,index)=>{
     const btn = document.createElement("button");
     btn.textContent = song.title;
@@ -572,10 +584,11 @@ function loadAlbum(name){
     playlistDiv.appendChild(btn);
   });
 
+ // Add class to indicate playlist is open
   document.body.classList.add("playlist-open");
+
   updatePlaylistButtons();
 }
-
 
 
 // --- Play song ---
@@ -667,23 +680,65 @@ document.getElementById("homeWrapper").appendChild(homeSquare);
 const row = document.createElement("div");
 row.className = "album-row";
 
-["Jims Jams", "Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].forEach(name=>{
+["Jams", "Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].forEach(name=>{
   const albumDiv = document.createElement("div");
   albumDiv.className = "album";
   albumDiv.innerHTML = `<img src="${albums[name].cover}" alt="${name}"><div class="album-title">${name}</div>`;
-  albumDiv.addEventListener("click", ()=>loadAlbum(name));
+   if (window.innerWidth <= 480) {
+    // Mobile: pop effect on tap
+    albumDiv.addEventListener("click", () => {
+      const img = albumDiv.querySelector("img");
+      img.classList.remove("pop");       // reset animation
+      void img.offsetWidth;              // force reflow
+      img.classList.add("pop");          // trigger pop
+      img.addEventListener("animationend", () => {
+        img.classList.remove("pop");
+        loadAlbum(name);                 // load album after animation
+      }, { once: true });
+    });
+  } else {
+    // Desktop: normal click
+    albumDiv.addEventListener("click", () => loadAlbum(name));
+  }
+
   row.appendChild(albumDiv);
 });
 
 albumsDiv.appendChild(row);
-
+    
 // --- Album tiles (all others) ---
-Object.keys(albums).forEach(name=>{
-  if (["Jims Jams","Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].includes(name)) return;
+    Object.keys(albums).forEach(name => {
+  if (["Jams","Ooh La La - Les Miserables", "Rent Soundtrack", "Moulin Rouge Soundtrack", "Burlesque Soundtrack"].includes(name)) return;
+
   const albumDiv = document.createElement("div");
   albumDiv.className = "album";
   albumDiv.innerHTML = `<img src="${albums[name].cover}" alt="${name}"><div class="album-title">${name}</div>`;
-  albumDiv.addEventListener("click", ()=>loadAlbum(name));
+
+  if (window.innerWidth <= 480) {
+    // Mobile: pop effect on tap
+    albumDiv.addEventListener("click", () => {
+      const img = albumDiv.querySelector("img");
+
+      // Remove previous animation if any
+      img.classList.remove("pop");
+
+      // Force reflow to restart animation
+      void img.offsetWidth;
+
+      // Trigger animation
+      img.classList.add("pop");
+
+      // Load album after animation completes
+      img.addEventListener("animationend", () => {
+        img.classList.remove("pop");
+        loadAlbum(name);
+      }, { once: true });
+    });
+  } else {
+    // Desktop: normal click
+    albumDiv.addEventListener("click", () => loadAlbum(name));
+  }
+
   albumsDiv.appendChild(albumDiv);
 });
 
@@ -750,6 +805,7 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
 
 
 
